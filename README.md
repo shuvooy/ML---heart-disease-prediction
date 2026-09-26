@@ -40,6 +40,12 @@ On a held-out 20% test split (random_state=42):
 Top predictive features (Random Forest): `ST_Slope`, `Oldpeak`,
 `Cholesterol`, `ChestPainType`.
 
+Tech Stack
+Python
+pandas / NumPy — data loading and manipulation
+scikit-learn — preprocessing, modeling, evaluation
+joblib — model serialization
+
 ## Setup
 
 ```bash
