@@ -1,8 +1,4 @@
-"""
-Heart Disease Prediction
-Trains Logistic Regression and Random Forest classifiers on the
-UCI Heart Failure Prediction dataset and compares their performance.
-"""
+
 
 import pandas as pd
 import numpy as np
@@ -22,7 +18,7 @@ FILE_PATH = 'heart.csv'
 MODEL_PATH = 'heart_model.pkl'
 label_map = {0: 'No Disease', 1: 'Heart Disease'}
 
-# ── Load & inspect ────────────────────────────────────────────────
+# Loading & inspecting 
 df = pd.read_csv(FILE_PATH)
 
 print(df.info())
@@ -36,7 +32,7 @@ y = df['HeartDisease']
 numerical_cols   = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
 categorical_cols = X.select_dtypes(include=['object']).columns.tolist()
 
-# ── Preprocessing ─────────────────────────────────────────────────
+# Preprocessing 
 num_transformer = Pipeline([('scaler', StandardScaler())])
 cat_transformer = Pipeline([('encoder', OneHotEncoder(handle_unknown='ignore',
                                                        sparse_output=False))])
@@ -50,7 +46,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y
 )
 
-# ── Models ────────────────────────────────────────────────────────
+# Models 
 lr_pipe = Pipeline([
     ('preprocessor', preprocessor),
     ('classifier', LogisticRegression(max_iter=1000, random_state=42))
@@ -73,7 +69,7 @@ print(classification_report(y_test, y_pred_lr, target_names=['No Disease', 'Hear
 print("Random Forest")
 print(classification_report(y_test, y_pred_rf, target_names=['No Disease', 'Heart Disease']))
 
-# ── Feature importance (Random Forest) ───────────────────────────
+# Feature importance (Random Forest) 
 ohe_cols = (rf_pipe.named_steps['preprocessor']
                    .named_transformers_['cat']
                    .named_steps['encoder']
@@ -88,7 +84,7 @@ feat_df = (pd.DataFrame({'Feature': all_cols, 'Importance': importances})
 
 print(feat_df.head())
 
-# ── Save & reload the Random Forest pipeline (best performer) ────
+# Saving & reloading the Random Forest pipeline (best performer) 
 joblib.dump(rf_pipe, MODEL_PATH)
 
 model  = joblib.load(MODEL_PATH)
